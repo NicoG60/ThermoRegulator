@@ -49,8 +49,8 @@ public:
     static void timeout();
 
     unsigned long syncDelay  = 0;
-    unsigned int  triacDelay = 0;
-    unsigned int  triacMax   = 0;
+    unsigned long triacDelay = 0;
+    unsigned long triacMax   = 0;
 
     volatile uint16_t tickCount = 0;
 };

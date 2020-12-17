@@ -66,11 +66,27 @@ void Triac::decDelay(unsigned int a)
  * 
  * --------------|--------------  <--- This is a representation of when the 
  *                                     Current corsses 0
+ * 
+ * In theory, all impulses are exactly equal and you can take half of the
+ * measured time to get the exact zero cross point.
+ * 
+ * In practice this is not true and your controller is not accurate enough for
+ * that. So instead of halving the duration, we'll keep it. We'll even add a
+ * little extra delay to be absolutely sure we will avoid flickers.
+ * 
+ * What you get is that
+ * 
+ *              ___                                ___
+ * ____________|   |______________________________|   |_______________
+ * 
+ * --------------|----------------------------------|-----------------
+ * 
+ * =========|        |==========================|       |=============
+ *                     \_ This is the actual available time to count
+ *                        And it is way enough to drive a simple IR lamp.
  */
 void Triac::detectSync()
 {
-    unsigned long max = 0;
-
     // Takes 100 pulse length and get the max one
     for(int i = 0; i < 100; i++)
     {
@@ -79,12 +95,11 @@ void Triac::detectSync()
         if(pulse == 0)
             continue;
 
-        if(pulse > max)
-            max = pulse;
+        if(pulse > syncDelay)
+            syncDelay = pulse;
     }
 
-    // take the half of the max to get the zero crossing offset
-    syncDelay = (max / 2) + 500;
+    syncDelay += 300; // little extra to avoid timing issue
 
     // Update max delay allowed to avoid flicker
     triacMax = 10000-syncDelay;
