@@ -114,7 +114,7 @@ void Ui::drawIdleScreen()
 
     if(_controller.isTurnedOn)
     {
-        display.print(100 - (_triac.triacDelay/100));
+        display.print(100 - ((_triac.triacDelay*100)/_triac.triacMax));
         display.print("% ");
 
         if(_controller.shouldWarmUp())
