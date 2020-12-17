@@ -215,7 +215,7 @@ void Ui::drawSetTempBiasScreen()
 
     display.setTextSize(1, 2);
     display.setCursor(50, 9);
-    display.print(_thermo.bias, 1);
+    display.print(_controller.biasTmp, 1);
     display.print(".C");
 
     drawButton(16, 16, '-');
